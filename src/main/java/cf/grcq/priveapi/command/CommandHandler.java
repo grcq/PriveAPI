@@ -71,14 +71,13 @@ public class CommandHandler {
 
     @SneakyThrows
     private static void updateMap() {
-
         if (Bukkit.getPluginManager() instanceof SimplePluginManager) {
             SimplePluginManager pluginManager = (SimplePluginManager) Bukkit.getPluginManager();
 
-            Field field = pluginManager.getClass().getDeclaredField("commandMap");
-            field.setAccessible(true);
+            Field commandMap = pluginManager.getClass().getDeclaredField("commandMap");
+            commandMap.setAccessible(true);
 
-            map = (CommandMap) field.get(pluginManager);
+            map = (CommandMap) commandMap.get(pluginManager);
         }
     }
 
@@ -152,7 +151,7 @@ public class CommandHandler {
         registerParameter(Double.class, new DoubleParameterType());
 
         registerClass(PriveAPI.getInstance(), CommandInfoCommand.class);
-        // registerClass(PriveAPI.getInstance(), TestCommand.class);
+        registerClass(PriveAPI.getInstance(), TestCommand.class);
     }
 
 }

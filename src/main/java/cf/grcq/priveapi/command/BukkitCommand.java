@@ -48,10 +48,9 @@ public class BukkitCommand extends org.bukkit.command.Command {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
-        if (sender instanceof Player) {
-            return node.tabComplete(((Player) sender).getPlayer(), args);
-        }
+        if (!(sender instanceof Player)) return new ArrayList<>();
 
-        return new ArrayList<>();
+        return node.tabComplete(((Player) sender).getPlayer(), args);
+
     }
 }
