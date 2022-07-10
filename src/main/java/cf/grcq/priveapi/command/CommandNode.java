@@ -8,8 +8,10 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,6 +24,7 @@ import java.util.Map;
 @Data
 public class CommandNode {
 
+    private final JavaPlugin plugin;
     private final Command annotation;
 
     private final Method method;
@@ -30,7 +33,8 @@ public class CommandNode {
     private final String permission;
     private final String description;
 
-    public CommandNode(Method method) {
+    public CommandNode(JavaPlugin plugin, Method method) {
+        this.plugin = plugin;
         this.annotation = method.getAnnotation(Command.class);
 
         this.method = method;
@@ -134,7 +138,14 @@ public class CommandNode {
         if (b) return;
 
         Object[] parameterObjects = parameters.toArray(new Object[0]);
-        method.invoke(null, parameterObjects);
+        if (annotation.async()) Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            try {
+                method.invoke(null, parameterObjects);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        });
+        else method.invoke(null, parameterObjects);
     }
 
     protected String getUsage() {

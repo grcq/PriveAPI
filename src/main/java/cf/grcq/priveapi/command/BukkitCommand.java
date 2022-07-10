@@ -2,6 +2,7 @@ package cf.grcq.priveapi.command;
 
 import cf.grcq.priveapi.utils.Util;
 import com.google.common.collect.Lists;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,7 +21,12 @@ public class BukkitCommand extends org.bukkit.command.Command {
         this.annotation = annotation;
         this.node = node;
 
-        setPermissionMessage(Util.format(CommandHandler.getNoPermissionMessage()));
+        if (annotation.hidden()) {
+            if (node.getPermission().isEmpty()) {
+                setPermission(node.getPlugin().getDescription().getName().toLowerCase() + ".command." + node.getName().toLowerCase());
+                setPermissionMessage(CommandHandler.getUnknownCommandMessage());
+            }
+        } else setPermissionMessage(Util.format(CommandHandler.getNoPermissionMessage()));
     }
 
     @Override

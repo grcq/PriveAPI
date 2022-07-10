@@ -12,6 +12,7 @@ public final class PriveAPI extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
+        CommandHandler.init();
     }
 
     @Override

@@ -18,4 +18,15 @@ public class TestCommand {
         sender.sendMessage("message: " + message);
     }
 
+    @Command(names = "yes")
+    public static void yes(CommandSender sender) {
+        sender.sendMessage("yes");
+    }
+
+    // Does not work, will find a way to create parameters like this one time.
+    @Command(names = "yes hello")
+    public static void yeshello(CommandSender sender, @Param(name = "integer") Integer integer, @Param(name = "boolean") Boolean bool) {
+        sender.sendMessage("Hello there! " + integer + " " + bool);
+    }
+
 }

@@ -1,5 +1,8 @@
 package cf.grcq.priveapi.command;
 
+import cf.grcq.priveapi.PriveAPI;
+import cf.grcq.priveapi.command.defaults.CommandInfoCommand;
+import cf.grcq.priveapi.command.defaults.TestCommand;
 import cf.grcq.priveapi.command.parameter.ParameterType;
 import cf.grcq.priveapi.command.parameter.defaults.*;
 import cf.grcq.priveapi.utils.ClassUtils;
@@ -11,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -22,18 +26,16 @@ import java.util.Map;
 public class CommandHandler {
 
     @Getter(value = AccessLevel.PROTECTED)
-    private static final List<CommandNode> commands;
+    private static List<CommandNode> commands;
     @Getter(value = AccessLevel.PROTECTED)
-    private static final Map<Class<?>, ParameterType<?>> parameters;
+    private static Map<Class<?>, ParameterType<?>> parameters;
 
-    @Getter
-    @Setter
-    private static String noPermissionMessage;
-    @Getter
-    @Setter
-    private static String playerOnlyMessage;
+    @Getter @Setter private static String noPermissionMessage;
+    @Getter @Setter private static String playerOnlyMessage;
+    @Getter @Setter private static String unknownCommandMessage;
 
     private static CommandMap map;
+    private static boolean initalized = false;
 
     public static void registerParameter(Class<?> clazz, ParameterType<?> parameterType) {
         parameters.put(clazz, parameterType);
@@ -56,7 +58,7 @@ public class CommandHandler {
     }
 
     private static void registerMethod(JavaPlugin plugin, Method method) {
-        CommandNode commandNode = new CommandNode(method);
+        CommandNode commandNode = new CommandNode(plugin, method);
         BukkitCommand command = new BukkitCommand(commandNode.getAnnotation(), commandNode);
 
         map.register(plugin.getDescription().getName().toLowerCase(), command);
@@ -80,6 +82,7 @@ public class CommandHandler {
         }
     }
 
+    @Nullable
     protected static Object transformParameter(CommandSender sender, String parameter, Class<?> transformTo) {
         if (transformTo == String.class) {
             return parameter;
@@ -91,7 +94,46 @@ public class CommandHandler {
         return type.transform(sender, parameter);
     }
 
-    static {
+    @Nullable
+    public static CommandNode find(String command, JavaPlugin plugin) {
+        CommandNode foundNode = null;
+
+        for (CommandNode node : getCommands()) {
+            if (node.getName().equalsIgnoreCase(command) && pluginEqual(node.getPlugin(), plugin)) {
+                foundNode = node;
+                break;
+            }
+        }
+
+        return foundNode;
+    }
+
+    @Nullable
+    public static CommandNode find(String command) {
+        CommandNode foundNode = null;
+
+        for (CommandNode node : getCommands()) {
+            if (node.getName().equalsIgnoreCase(command)) {
+                foundNode = node;
+                break;
+            }
+        }
+
+        return foundNode;
+    }
+
+    private static boolean pluginEqual(JavaPlugin plugin1, JavaPlugin plugin2) {
+        return plugin1.getDescription().getName().equalsIgnoreCase(plugin2.getDescription().getName());
+    }
+
+    @SneakyThrows
+    public static void init() {
+        if (initalized) {
+            throw new IllegalAccessException("Command Handler is already initalized.");
+        }
+
+        initalized = true;
+
         commands = new ArrayList<>();
         parameters = new HashMap<>();
 
@@ -99,6 +141,7 @@ public class CommandHandler {
 
         noPermissionMessage = "&cNo permission!";
         playerOnlyMessage = "&cPlayers only!";
+        unknownCommandMessage = "Unknown command. Type \"/help\" for help.";
 
         registerParameter(String.class, new StringParameterType());
         registerParameter(Player.class, new PlayerParameterType());
@@ -107,6 +150,9 @@ public class CommandHandler {
         registerParameter(Integer.class, new IntegerParameterType());
         registerParameter(Float.class, new FloatParameterType());
         registerParameter(Double.class, new DoubleParameterType());
+
+        registerClass(PriveAPI.getInstance(), CommandInfoCommand.class);
+        // registerClass(PriveAPI.getInstance(), TestCommand.class);
     }
 
 }
