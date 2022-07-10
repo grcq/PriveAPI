@@ -78,7 +78,7 @@ public class CommandNode {
 
     protected void invoke(CommandSender sender, String[] args) throws IllegalAccessException, InvocationTargetException {
 
-        boolean playerOnly = method.getParameterTypes()[0].isAssignableFrom(Player.class);
+        boolean playerOnly = method.getParameters()[0].getType() == Player.class;
         if (playerOnly && !(sender instanceof Player)) {
             sender.sendMessage(Util.format(CommandHandler.getPlayerOnlyMessage()));
             return;
@@ -93,6 +93,8 @@ public class CommandNode {
         boolean b = false;
 
         List<Object> parameters = new ArrayList<>();
+        parameters.add((playerOnly ? ((Player) sender).getPlayer() : sender));
+
         List<Parameter> methodParameters = Lists.newArrayList(method.getParameters().clone());
         methodParameters.remove(0);
 
@@ -104,23 +106,17 @@ public class CommandNode {
             Param param = parameter.getAnnotation(Param.class);
             if (param == null) continue;
 
-            String s;
+            String s = (i < args.length ? args[i] : param.defaultValue());
             if (param.wildcard()) {
                 a = true;
                 s = toString(args, i);
-            } else if (i < args.length) s = args[i];
-            else s = param.defaultValue();
+            }
 
-            System.out.println(s);
-            System.out.println(Arrays.toString(args));
-
-            if (s == null) {
-                sender.sendMessage(Util.format(getUsage()));
+            if (s == null || s.isEmpty()) {
                 break;
             }
 
             Object object = CommandHandler.transformParameter(sender, s, parameter.getType());
-            System.out.println(object);
             if (object == null) {
                 b = true;
                 break;
@@ -130,14 +126,15 @@ public class CommandNode {
             i++;
         }
 
-        if (parameters.size() < (method.getParameterCount() - 1) && !b) {
+        if ((parameters.size() - 1) < methodParameters.size() && !b) {
             sender.sendMessage(Util.format(getUsage()));
             return;
         }
 
         if (b) return;
 
-        method.invoke(null, (playerOnly ? ((Player) sender).getPlayer() : sender), parameters.toArray(new Object[0]));
+        Object[] parameterObjects = parameters.toArray(new Object[0]);
+        method.invoke(null, parameterObjects);
     }
 
     protected String getUsage() {

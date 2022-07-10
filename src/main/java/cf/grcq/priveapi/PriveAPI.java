@@ -12,8 +12,6 @@ public final class PriveAPI extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        CommandHandler.registerAll(this);
-
     }
 
     @Override

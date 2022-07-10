@@ -1,11 +1,11 @@
 package cf.grcq.priveapi.command;
 
 import cf.grcq.priveapi.command.parameter.ParameterType;
-import cf.grcq.priveapi.command.parameter.defaults.PlayerParameterType;
-import cf.grcq.priveapi.command.parameter.defaults.StringParameterType;
+import cf.grcq.priveapi.command.parameter.defaults.*;
 import cf.grcq.priveapi.utils.ClassUtils;
 import lombok.*;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -60,6 +60,11 @@ public class CommandHandler {
         BukkitCommand command = new BukkitCommand(commandNode.getAnnotation(), commandNode);
 
         map.register(plugin.getDescription().getName().toLowerCase(), command);
+        commands.add(commandNode);
+    }
+
+    public static void unregisterCommand(String command) {
+        map.getCommand(command).unregister(map);
     }
 
     @SneakyThrows
@@ -83,7 +88,6 @@ public class CommandHandler {
         ParameterType<?> type = parameters.get(transformTo);
         if (type == null) throw new IllegalArgumentException("Unknown parameter type for class '" + transformTo.getSimpleName() + ".java'. Forgot to register?");
 
-
         return type.transform(sender, parameter);
     }
 
@@ -98,6 +102,11 @@ public class CommandHandler {
 
         registerParameter(String.class, new StringParameterType());
         registerParameter(Player.class, new PlayerParameterType());
+        registerParameter(OfflinePlayer.class, new OfflinePlayerParameterType());
+        registerParameter(Boolean.class, new BooleanParameterType());
+        registerParameter(Integer.class, new IntegerParameterType());
+        registerParameter(Float.class, new FloatParameterType());
+        registerParameter(Double.class, new DoubleParameterType());
     }
 
 }
