@@ -18,8 +18,12 @@ public final class PriveAPI extends JavaPlugin {
 
         CommandHandler.init();
 
+        getDataFolder().mkdirs();
+
         File file = new File(getDataFolder(), "data.yml");
-        if (!file.exists()) file.createNewFile();
+        if (!file.exists()) {
+            file.createNewFile();
+        }
     }
 
     @Override
