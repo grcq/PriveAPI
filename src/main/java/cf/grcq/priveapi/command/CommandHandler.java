@@ -6,6 +6,9 @@ import cf.grcq.priveapi.command.defaults.TestCommand;
 import cf.grcq.priveapi.command.parameter.ParameterType;
 import cf.grcq.priveapi.command.parameter.defaults.*;
 import cf.grcq.priveapi.utils.ClassUtils;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import lombok.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -127,10 +130,7 @@ public class CommandHandler {
 
     @SneakyThrows
     public static void init() {
-        if (initalized) {
-            throw new IllegalAccessException("Command Handler is already initalized.");
-        }
-
+        Preconditions.checkState(!initalized);
         initalized = true;
 
         commands = new ArrayList<>();
@@ -151,7 +151,7 @@ public class CommandHandler {
         registerParameter(Double.class, new DoubleParameterType());
 
         registerClass(PriveAPI.getInstance(), CommandInfoCommand.class);
-        registerClass(PriveAPI.getInstance(), TestCommand.class);
+        // registerClass(PriveAPI.getInstance(), TestCommand.class);
     }
 
 }
