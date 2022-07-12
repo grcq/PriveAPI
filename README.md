@@ -1,5 +1,5 @@
 # PriveAPI
-Documentation coming soon at https://docs.grcq.cf/
+Documentation: https://docs.grcq.cf/#/priveapi
 
 Examples in my Discord server:
 https://discord.gg/ZvHVcBxN3v 
