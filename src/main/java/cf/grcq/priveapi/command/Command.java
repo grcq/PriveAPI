@@ -15,4 +15,5 @@ public @interface Command {
 
     boolean hidden() default false;
     boolean async() default false;
+    boolean sendUsage() default false;
 }
