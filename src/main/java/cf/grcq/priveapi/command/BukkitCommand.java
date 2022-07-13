@@ -35,6 +35,7 @@ public class BukkitCommand extends org.bukkit.command.Command {
         try {
             node.invoke(sender, args);
         } catch (Exception e) {
+            sender.sendMessage(Util.format("&cAn unknown error occurred attempting to perform this command."));
             if (sender.isOp()) {
                 if (e.getCause() != null) sender.sendMessage(Util.format("&c" + e.getCause().toString()));
                 //sender.sendMessage(Util.format("&c" + e.getStackTrace()[0].toString()));
