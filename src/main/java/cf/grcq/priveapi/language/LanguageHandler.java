@@ -16,12 +16,12 @@ public class LanguageHandler {
     @Getter
     private final Map<UUID, Language> activeLanguage;
 
-    private final List<Language> registeredLanguages;
+    @Getter
+    private static final List<Language> registeredLanguages = new ArrayList<>();
     private final boolean useDatabase;
     private final Consumer<Player> databaseSaveMethod;
 
     public LanguageHandler(boolean useDatabase, Consumer<Player> databaseSaveMethod) {
-        this.registeredLanguages = new ArrayList<>();
         this.useDatabase = useDatabase;
         this.databaseSaveMethod = databaseSaveMethod;
 
@@ -29,6 +29,10 @@ public class LanguageHandler {
 
         FileConfig fileConfig = new FileConfig(new File(PriveAPI.getInstance().getDataFolder(), "data.yml"));
         ConfigurationSection section = fileConfig.getConfiguration().getConfigurationSection("data");
+        if (section == null) {
+            section = fileConfig.getConfiguration().createSection("data");
+        }
+
         for (String value : section.getKeys(false)) {
             UUID uuid = UUID.fromString(value);
 
@@ -37,7 +41,8 @@ public class LanguageHandler {
         }
     }
 
-    private Language parseLanguage(String shortName) {
+    @Nullable
+    public static Language parseLanguage(String shortName) {
         for (Language language : registeredLanguages) {
             if (language.getShortName().equalsIgnoreCase(shortName)) return language;
         }
@@ -71,6 +76,14 @@ public class LanguageHandler {
         }
 
         databaseSaveMethod.accept(player);
+    }
+
+    public Language getLanguage(Player player) {
+        return activeLanguage.get(player.getUniqueId());
+    }
+
+    public String get(Language language, String s) {
+        return language.getConfiguration().getString(s);
     }
 
 }
