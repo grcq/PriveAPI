@@ -50,20 +50,12 @@ public class CommandNode {
         List<String> arguments = new ArrayList<>();
 
         ParameterType<?> parameterType = null;
-        if (args.length <= (method.getParameterCount() - 1)) {
-            parameterType = CommandHandler.getParameters().get(method.getParameterTypes()[args.length]);
-        }
-
-        for (String child : children.keySet()) {
-            String[] split = child.split(" ");
-            if (split.length <= args.length) {
-                String arg = split[args.length - 1];
-                arguments.add(arg);
-            }
+        if (args.length <= method.getParameterCount()) {
+            parameterType = CommandHandler.getParameters().get(method.getParameterTypes()[args.length - 1]);
         }
 
         if (parameterType != null) {
-            String arg = args[(args.length - 1)];
+            String arg = args[args.length - 1];
             for (String s : parameterType.tabComplete(player, arg)) {
                 if (StringUtils.startsWithIgnoreCase(s, arg)) {
                     arguments.add(s);
@@ -71,7 +63,62 @@ public class CommandNode {
             }
         }
 
+        List<CommandNode> possibleChildren = getChild(args, true);
+        if (!possibleChildren.isEmpty()) {
+            CommandNode child = possibleChildren.get(0);
+
+            List<String> newArgs = Lists.newArrayList(args);
+            newArgs.removeAll(
+                    Lists.newArrayList(child.getName().replace(this.name + " ", "").split(" "))
+            );
+
+            return child.tabComplete(player, args);
+        }
+
+        for (String childString : children.keySet()) {
+            String[] split = childString.split(" ");
+
+            List<CommandNode> nodes = getChild(split, false);
+            for (CommandNode node : nodes) {
+                if (args.length >= split.length) continue;
+
+                String name = node.getName().replace(this.name + " ", "").split(" ")[args.length - 1];
+                if (arguments.contains(name)) continue;
+
+                if (StringUtils.startsWithIgnoreCase(name, args[args.length - 1])) {
+                    arguments.add(name);
+                }
+            }
+        }
+
         return arguments;
+    }
+
+    private List<CommandNode> getChild(String[] args, boolean full) {
+        List<CommandNode> possibleChildren = new ArrayList<>();
+        List<String> argsList = Lists.newArrayList(args);
+
+        if (full) {
+            for (int i = argsList.size(); i > 0; i--) {
+                String[] c = argsList.toArray(new String[0]);
+
+                CommandNode childFound = children.get(this.name + " " + String.join(" ", c));
+                if (childFound != null) {
+                    possibleChildren.add(childFound);
+                    break;
+                }
+
+                argsList.remove((i - 1));
+            }
+        } else {
+            for (Map.Entry<String, CommandNode> entry : children.entrySet()) {
+                if (entry.getKey().startsWith(String.join(" ", args))) {
+                    possibleChildren.add(entry.getValue());
+                }
+            }
+        }
+
+        return possibleChildren;
     }
 
     protected boolean canAccess(CommandSender sender) {
@@ -109,21 +156,10 @@ public class CommandNode {
         List<Parameter> methodParameters = Lists.newArrayList(method.getParameters().clone());
         methodParameters.remove(0);
 
-        CommandNode child = null;
-        List<String> argsList = Lists.newArrayList(args);
-        for (int i = argsList.size(); i > 0; i--) {
-            String[] c = argsList.toArray(new String[0]);
+        List<CommandNode> possibleChildren = getChild(args, true);
+        if (!possibleChildren.isEmpty()) {
+            CommandNode child = possibleChildren.get(0);
 
-            CommandNode childFound = children.get(this.name + " " + String.join(" ", c));
-            if (childFound != null) {
-                child = childFound;
-                break;
-            }
-
-            argsList.remove((i - 1));
-        }
-
-        if (child != null) {
             List<String> newArgs = Lists.newArrayList(args);
             newArgs.removeAll(
                     Lists.newArrayList(child.getName().replace(this.name + " ", "").split(" "))

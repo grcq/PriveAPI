@@ -2,6 +2,7 @@ package cf.grcq.priveapi.command;
 
 import cf.grcq.priveapi.PriveAPI;
 import cf.grcq.priveapi.command.defaults.CommandInfoCommand;
+import cf.grcq.priveapi.command.defaults.TestCommands;
 import cf.grcq.priveapi.command.parameter.ParameterType;
 import cf.grcq.priveapi.command.parameter.defaults.*;
 import cf.grcq.priveapi.utils.ClassUtils;
@@ -9,6 +10,7 @@ import com.google.common.base.Preconditions;
 import lombok.*;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -173,11 +175,17 @@ public class CommandHandler {
         registerParameter(Player.class, new PlayerParameterType());
         registerParameter(OfflinePlayer.class, new OfflinePlayerParameterType());
         registerParameter(Boolean.class, new BooleanParameterType());
+        registerParameter(boolean.class, new BooleanParameterType());
         registerParameter(Integer.class, new IntegerParameterType());
+        registerParameter(int.class, new IntegerParameterType());
         registerParameter(Float.class, new FloatParameterType());
+        registerParameter(float.class, new FloatParameterType());
         registerParameter(Double.class, new DoubleParameterType());
+        registerParameter(double.class, new DoubleParameterType());
+        registerParameter(World.class, new WorldParameterType());
 
         registerClass(PriveAPI.getInstance(), CommandInfoCommand.class);
+        registerClass(PriveAPI.getInstance(), TestCommands.class);
     }
 
 }
