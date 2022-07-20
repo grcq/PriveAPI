@@ -9,6 +9,7 @@ import cf.grcq.priveapi.utils.ClassUtils;
 import com.google.common.base.Preconditions;
 import lombok.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandMap;
@@ -183,6 +184,7 @@ public class CommandHandler {
         registerParameter(Double.class, new DoubleParameterType());
         registerParameter(double.class, new DoubleParameterType());
         registerParameter(World.class, new WorldParameterType());
+        registerParameter(Material.class, new MaterialParameterType());
 
         registerClass(PriveAPI.getInstance(), CommandInfoCommand.class);
         registerClass(PriveAPI.getInstance(), TestCommands.class);
