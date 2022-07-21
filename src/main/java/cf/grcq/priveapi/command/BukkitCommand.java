@@ -24,8 +24,9 @@ public class BukkitCommand extends org.bukkit.command.Command {
         if (annotation.hidden()) {
             if (node.getPermission().isEmpty()) {
                 setPermission(node.getPlugin().getDescription().getName().toLowerCase() + ".command." + node.getName().toLowerCase());
-                setPermissionMessage(CommandHandler.getUnknownCommandMessage());
             }
+            
+            setPermissionMessage(CommandHandler.getUnknownCommandMessage());
         } else setPermissionMessage(Util.format(CommandHandler.getNoPermissionMessage()));
     }
 
