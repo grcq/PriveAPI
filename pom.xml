@@ -6,7 +6,7 @@
 
     <groupId>cf.grcq</groupId>
     <artifactId>PriveAPI</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>PriveAPI</name>
@@ -80,6 +80,11 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>13.0</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>4.2.0</version>
         </dependency>
     </dependencies>
 </project>
