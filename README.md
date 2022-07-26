@@ -10,8 +10,8 @@ Create a folder named "libs" in your project and upload the JAR file to the "lib
 ```maven
 <dependency>
     <groupId>cf.grcq</groupId>
-    <artifactId>PriveAPI</groupId>
-    <version>1.0</groupId>
+    <artifactId>PriveAPI</artifactId>
+    <version>1.0</version>
     <scope>system</scope>
     <systemPath>${project.basedir}/libs/PriveAPI-1.0.jar</systemPath>
 </dependency>
