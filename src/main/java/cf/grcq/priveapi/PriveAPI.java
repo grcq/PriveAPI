@@ -17,6 +17,7 @@ public final class PriveAPI extends JavaPlugin {
     @SneakyThrows
     @Override
     public void onEnable() {
+        this.saveDefaultConfig();
         instance = this;
 
         CommandHandler.init();
@@ -31,6 +32,7 @@ public final class PriveAPI extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        this.saveDefaultConfig();
+
     }
 }
