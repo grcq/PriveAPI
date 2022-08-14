@@ -1,6 +1,7 @@
 package cf.grcq.priveapi;
 
 import cf.grcq.priveapi.command.CommandHandler;
+import cf.grcq.priveapi.gui.listener.GUIListener;
 import cf.grcq.priveapi.language.LanguageHandler;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -21,6 +22,8 @@ public final class PriveAPI extends JavaPlugin {
         instance = this;
 
         CommandHandler.init();
+
+        getServer().getPluginManager().registerEvents(new GUIListener(), this);
 
         getDataFolder().mkdirs();
 
