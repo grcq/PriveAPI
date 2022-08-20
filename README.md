@@ -11,7 +11,7 @@ You need to upload the JAR file to your plugins folder on your server. Go to you
 <repositories>
     <repository>
         <id>grcq-releases</id>
-        <url>https://repo.grcq.cf/repository/maven-releases/</url>
+        <url>http://repo.grcq.cf/repository/maven-releases/</url>
     </repository>
 </repositories>
 
