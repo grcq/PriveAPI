@@ -1,5 +1,7 @@
 package cf.grcq.priveapi.database;
 
+import cf.grcq.priveapi.utils.ClassUtils;
+import cf.grcq.processor.annotations.Database;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,7 +49,8 @@ public class DatabaseHandler {
     public static void init(JavaPlugin plugin) {
         instance = new DatabaseHandler();
 
-        for (Class<?> clazz : new ArrayList<Class<?>>()) {
+        Collection<Class<?>> classes = ClassUtils.getClassesInPackage(plugin, plugin.getClass().getPackage().getName());
+        for (Class<?> clazz : classes) {
             if (clazz.isAnnotationPresent(Database.class)) {
                 Database database = clazz.getAnnotation(Database.class);
 
@@ -83,8 +86,8 @@ public class DatabaseHandler {
 
     @SneakyThrows
     public void connect() {
-        String uri = "jdbc:mysql://?useSSL=true";
-        connection = DriverManager.getConnection(uri, "username", "password");
+        String uri = "Connection connection = DriverManager.getConnection(\"jdbc:mysql://u2_BPKhP87K0s:VdasFl^PTn1.X4y5^WR6weFV@127.0.0.1:3306/s2_Test\");";
+        connection = DriverManager.getConnection(uri);
     }
 
 }

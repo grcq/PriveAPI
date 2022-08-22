@@ -2,18 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>PriveAPI</artifactId>
+        <groupId>cf.grcq</groupId>
+        <version>1.1</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cf.grcq</groupId>
-    <artifactId>PriveAPI</artifactId>
-    <version>1.1</version>
-    <modules>
-        <module>AnnotationProcessor</module>
-        <module>Core</module>
-    </modules>
-    <packaging>pom</packaging>
+    <artifactId>Core</artifactId>
+    <packaging>jar</packaging>
 
-    <name>PriveAPI</name>
+    <name>Core</name>
 
     <properties>
         <java.version>1.8</java.version>
@@ -59,6 +58,10 @@
 
     <repositories>
         <repository>
+            <id>spigotmc-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
@@ -66,24 +69,20 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>23.0.0</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>4.2.3</version>
+            <groupId>cf.grcq</groupId>
+            <artifactId>AnnotationProcessor</artifactId>
+            <version>1.1</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-            <version>2.11.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>3.12.11</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
         </dependency>
     </dependencies>
+
 </project>

@@ -5,8 +5,6 @@ import cf.grcq.priveapi.command.parameter.ParameterType;
 import cf.grcq.priveapi.utils.Util;
 import com.google.common.collect.Lists;
 import lombok.Data;
-import lombok.Getter;
-import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

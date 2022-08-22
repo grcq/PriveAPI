@@ -3,7 +3,6 @@ package cf.grcq.priveapi.command.parameter.defaults;
 import cf.grcq.priveapi.command.parameter.ParameterType;
 import cf.grcq.priveapi.utils.Util;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
