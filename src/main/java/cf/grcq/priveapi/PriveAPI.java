@@ -1,7 +1,6 @@
 package cf.grcq.priveapi;
 
 import cf.grcq.priveapi.command.CommandHandler;
-import cf.grcq.priveapi.database.DatabaseHandler;
 import cf.grcq.priveapi.gui.listener.GUIListener;
 import cf.grcq.priveapi.language.LanguageHandler;
 import lombok.Getter;
@@ -9,8 +8,6 @@ import lombok.SneakyThrows;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
 
 public final class PriveAPI extends JavaPlugin {
 
@@ -34,8 +31,6 @@ public final class PriveAPI extends JavaPlugin {
         if (!file.exists()) {
             file.createNewFile();
         }
-
-        DatabaseHandler.init(this);
     }
 
     @Override

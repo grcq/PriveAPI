@@ -1,5 +1,6 @@
 package cf.grcq.priveapi.command;
 
+import cf.grcq.priveapi.command.flag.Flag;
 import cf.grcq.priveapi.command.parameter.Param;
 import cf.grcq.priveapi.command.parameter.ParameterType;
 import cf.grcq.priveapi.utils.Util;
@@ -169,29 +170,55 @@ public class CommandNode {
 
         int i = 0;
         for (Parameter parameter : methodParameters) {
-            if (!parameter.isAnnotationPresent(Param.class)) continue;
             if (a) break;
 
-            Param param = parameter.getAnnotation(Param.class);
-            if (param == null) continue;
+            if (parameter.isAnnotationPresent(Param.class)) {
+                Param param = parameter.getAnnotation(Param.class);
+                if (param == null) continue;
 
-            String s = (i < args.length ? args[i] : param.defaultValue());
-            if (param.wildcard()) {
-                a = true;
-                s = toString(args, i);
+                if (parameter.isAnnotationPresent(Flag.class)) {
+                    Flag flag = parameter.getAnnotation(Flag.class);
+                    if (flag == null) continue;
+
+                    String s = (i < args.length ? args[i] : param.defaultValue());
+                    if (s.equalsIgnoreCase("-" + flag.name()))  {
+                        String s_ = args[i + 1];
+                        if (s_ == null) {
+                            break;
+                        }
+
+                        Object object = CommandHandler.transformParameter(sender, s_, parameter.getType());
+                        parameters.add(object);
+                    }
+                } else {
+                    String s = (i < args.length ? args[i] : param.defaultValue());
+                    if (param.wildcard()) {
+                        a = true;
+                        s = toString(args, i);
+                    }
+
+                    if (s == null || s.isEmpty()) {
+                        break;
+                    }
+
+                    Object object = CommandHandler.transformParameter(sender, s, parameter.getType());
+                    if (object == null) {
+                        b = true;
+                        break;
+                    }
+
+                    parameters.add(object);
+                }
+            } else if (parameter.isAnnotationPresent(Flag.class)) {
+                Flag flag = parameter.getAnnotation(Flag.class);
+                if (flag == null) continue;
+
+                String fullArguments = String.join(" ", args);
+                parameters.add(fullArguments.contains("-" + flag.name()));
+            } else {
+                throw new RuntimeException("Parameter does not have @Param or @Flag annotation.");
             }
 
-            if (s == null || s.isEmpty()) {
-                break;
-            }
-
-            Object object = CommandHandler.transformParameter(sender, s, parameter.getType());
-            if (object == null) {
-                b = true;
-                break;
-            }
-
-            parameters.add(object);
             i++;
         }
 
@@ -228,13 +255,23 @@ public class CommandNode {
             StringBuilder params = new StringBuilder();
             for (Parameter parameter : method.getParameters()) {
                 Param param = parameter.getAnnotation(Param.class);
+                Flag flag = parameter.getAnnotation(Flag.class);
+                if (flag != null) {
+                    params.append("[")
+                            .append(flag.name())
+                            .append("] ");
+                }
+
                 if (param != null) {
                     boolean required = param.defaultValue().isEmpty();
 
-                    params.append((required ? "<" : "["))
-                            .append(param.name())
-                            .append((required ? ">" : "]"))
-                            .append(" ");
+                    if (flag == null) {
+                        params.append((required ? "<" : "["))
+                                .append(param.name())
+                                .append((required ? "> " : "] "));
+                    } else {
+                        params.append("[-").append(param.name()).append("] ");
+                    }
                 }
             }
 
