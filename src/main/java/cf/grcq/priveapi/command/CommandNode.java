@@ -168,6 +168,7 @@ public class CommandNode {
             return;
         }
 
+        int flagsUsed = 0;
         int i = 0;
         for (Parameter parameter : methodParameters) {
             if (a) break;
@@ -183,6 +184,7 @@ public class CommandNode {
                     String s = (i < args.length ? args[i] : param.defaultValue());
                     if (s.equalsIgnoreCase("-" + flag.name()))  {
                         if (args.length <= i + 1) {
+                            System.out.println("ok");
                             parameters.add(null);
                             continue;
                         }
@@ -190,26 +192,34 @@ public class CommandNode {
                         String s_ = args[i + 1];
 
                         Object object = CommandHandler.transformParameter(sender, s_, parameter.getType());
+                        System.out.println(object);
                         if (object == null) {
+                            System.out.println("break");
+                            b = true;
                             break;
                         }
 
+                        flagsUsed++;
                         parameters.add(object);
                     } else {
                         parameters.add(null);
                     }
                 } else {
-                    String s = (i < args.length ? args[i] : param.defaultValue());
+                    String s = (i + flagsUsed + (flagsUsed > 0 ? 1 : 0) < args.length ? args[i + flagsUsed] : param.defaultValue());
+                    System.out.println(args.length + " " + i + " " + (i + flagsUsed));
                     if (param.wildcard()) {
                         a = true;
-                        s = toString(args, i);
+                        s = toString(args, i + flagsUsed);
                     }
+
+                    System.out.println(s + " AAA");
 
                     if (s == null || s.isEmpty()) {
                         break;
                     }
 
                     Object object = CommandHandler.transformParameter(sender, s, parameter.getType());
+                    System.out.println(object);
                     if (object == null) {
                         b = true;
                         break;
@@ -232,14 +242,19 @@ public class CommandNode {
 
         if (b) return;
 
+        System.out.println("hi " + parameters.size() + " " + methodParameters.size());
+        System.out.println(methodParameters);
+        System.out.println(parameters);
+
         if ((annotation.sendUsage() && method.getParameterCount() <= 1) ||
-                ((parameters.size() - 1) < methodParameters.size())) {
+                ((parameters.size() - 1 - flagsUsed) < (methodParameters.size()))) {
             sender.sendMessage(Util.format(getUsage()));
             return;
         }
 
-        if (((parameters.size() - 1) > methodParameters.size() && !a)) {
+        if (((parameters.size() - 1 - flagsUsed) > (methodParameters.size()) && !a)) {
             sender.sendMessage(Util.format(getUsage()));
+            System.out.println("hi " + parameters.size() + " " + methodParameters.size());
             return;
         }
 

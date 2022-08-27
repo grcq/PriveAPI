@@ -31,7 +31,7 @@ public class TestCommands {
 
     @Command(names = "flagtest")
     public static void testFlag(Player player, @Param(name = "string") String s, @Flag(name = "f") @Param(name = "player") Player flag, @Param(name = "double") double d) {
-        player.sendMessage("String: s");
+        player.sendMessage("String: " + s);
         player.sendMessage("Double: " + d);
         player.sendMessage("Flag used? " + (flag == null ? "No" : flag.getName()));
     }
