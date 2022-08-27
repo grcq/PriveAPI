@@ -182,13 +182,21 @@ public class CommandNode {
 
                     String s = (i < args.length ? args[i] : param.defaultValue());
                     if (s.equalsIgnoreCase("-" + flag.name()))  {
+                        if (args.length <= i + 1) {
+                            parameters.add(null);
+                            continue;
+                        }
+
                         String s_ = args[i + 1];
-                        if (s_ == null) {
+
+                        Object object = CommandHandler.transformParameter(sender, s_, parameter.getType());
+                        if (object == null) {
                             break;
                         }
 
-                        Object object = CommandHandler.transformParameter(sender, s_, parameter.getType());
                         parameters.add(object);
+                    } else {
+                        parameters.add(null);
                     }
                 } else {
                     String s = (i < args.length ? args[i] : param.defaultValue());
@@ -257,8 +265,7 @@ public class CommandNode {
                 Param param = parameter.getAnnotation(Param.class);
                 Flag flag = parameter.getAnnotation(Flag.class);
                 if (flag != null) {
-                    params.append("[")
-                            .append(flag.name())
+                    params.append("[").append("-").append(flag.name())
                             .append("] ");
                 }
 
@@ -270,7 +277,7 @@ public class CommandNode {
                                 .append(param.name())
                                 .append((required ? "> " : "] "));
                     } else {
-                        params.append("[-").append(param.name()).append("] ");
+                        params.append("[").append(param.name()).append("] ");
                     }
                 }
             }
@@ -291,13 +298,22 @@ public class CommandNode {
                     params.append(childParam);
                     for (Parameter parameter : child.getValue().getMethod().getParameters()) {
                         Param param = parameter.getAnnotation(Param.class);
+                        Flag flag = parameter.getAnnotation(Flag.class);
+                        if (flag != null) {
+                            params.append("[").append("-").append(flag.name())
+                                    .append("] ");
+                        }
+
                         if (param != null) {
                             boolean required = param.defaultValue().isEmpty();
 
-                            params.append((required ? "<" : "["))
-                                    .append(param.name())
-                                    .append((required ? ">" : "]"))
-                                    .append(" ");
+                            if (flag == null) {
+                                params.append((required ? "<" : "["))
+                                        .append(param.name())
+                                        .append((required ? "> " : "] "));
+                            } else {
+                                params.append("[").append(param.name()).append("] ");
+                            }
                         }
                     }
 
@@ -324,13 +340,22 @@ public class CommandNode {
 
                     for (Parameter parameter : childNode.getMethod().getParameters()) {
                         Param param = parameter.getAnnotation(Param.class);
+                        Flag flag = parameter.getAnnotation(Flag.class);
+                        if (flag != null) {
+                            params.append("[").append("-").append(flag.name())
+                                    .append("] ");
+                        }
+
                         if (param != null) {
                             boolean required = param.defaultValue().isEmpty();
 
-                            params.append((required ? "<" : "["))
-                                    .append(param.name())
-                                    .append((required ? ">" : "]"))
-                                    .append(" ");
+                            if (flag == null) {
+                                params.append((required ? "<" : "["))
+                                        .append(param.name())
+                                        .append((required ? "> " : "] "));
+                            } else {
+                                params.append("[").append(param.name()).append("] ");
+                            }
                         }
                     }
 
