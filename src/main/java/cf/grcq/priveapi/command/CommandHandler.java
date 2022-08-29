@@ -49,7 +49,7 @@ public class CommandHandler {
     }
 
     public static void registerAll(JavaPlugin plugin) {
-        for (Class<?> clazz : ClassUtils.getClassesInPackage(plugin, plugin.getClass().getPackage().getName())) {
+        for (Class<?> clazz : ClassUtils.getClassesInPackage(plugin.getClass(), plugin.getClass().getPackage().getName())) {
             registerClass(plugin, clazz);
         }
     }

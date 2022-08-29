@@ -17,10 +17,10 @@ import java.util.jar.JarFile;
 @UtilityClass
 public class ClassUtils {
 
-    public static Collection<Class<?>> getClassesInPackage(JavaPlugin plugin, String packageName) {
+    public static Collection<Class<?>> getClassesInPackage(Class<?> mainClass, String packageName) {
         Collection<Class<?>> classes = new ArrayList<>();
 
-        CodeSource codeSource = plugin.getClass().getProtectionDomain().getCodeSource();
+        CodeSource codeSource = mainClass.getProtectionDomain().getCodeSource();
         URL resource = codeSource.getLocation();
         String relPath = packageName.replace('.', '/');
         String resPath = resource.getPath().replace("%20", " ");
