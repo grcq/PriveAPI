@@ -12,7 +12,7 @@ public @interface Flag {
 
     Pattern FLAG_PATTERN = Pattern.compile("(-)([a-zA-Z])([\\w]*)?");
 
-    String name();
+    String[] names();
 
     boolean defaultValue() default false;
 

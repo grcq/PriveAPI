@@ -30,10 +30,10 @@ public class TestCommands {
     }
 
     @Command(names = "flagtest")
-    public static void testFlag(Player player, @Param(name = "string") String s, @Flag(name = "f") @Param(name = "player") Player flag, @Param(name = "double") double d) {
-        player.sendMessage("String: " + s);
-        player.sendMessage("Double: " + d);
-        player.sendMessage("Flag used? " + (flag == null ? "No" : flag.getName()));
+    public static void testFlag(Player player, @Param(name = "string1") String s, @Flag(names = {"f", "flag"}) boolean f, @Param(name = "string2") String a) {
+        player.sendMessage("String 1: " + s);
+        player.sendMessage("String 2: " + a);
+        player.sendMessage("Flag used? " + f);
     }
 
 }

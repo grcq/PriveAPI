@@ -2,11 +2,13 @@ package cf.grcq.priveapi.command;
 
 import cf.grcq.priveapi.utils.Util;
 import com.google.common.collect.Lists;
+import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +18,7 @@ public class BukkitCommand extends org.bukkit.command.Command {
     private final Command annotation;
     private final CommandNode node;
 
+    @SneakyThrows
     public BukkitCommand(Command annotation, CommandNode node) {
         super(node.getName(), "", node.getPermission(), Lists.newArrayList(node.getAliases()));
         this.annotation = annotation;
@@ -25,8 +28,11 @@ public class BukkitCommand extends org.bukkit.command.Command {
             if (node.getPermission().isEmpty()) {
                 setPermission(node.getPlugin().getDescription().getName().toLowerCase() + ".command." + node.getName().toLowerCase());
             }
-            
-            setPermissionMessage(CommandHandler.getUnknownCommandMessage());
+
+            Class<?> clazz = Class.forName("org.spigotmc.SpigotConfig");
+            Field field = clazz.getDeclaredField("unknownCommandMessage");
+
+            setPermissionMessage((String) field.get(clazz));
         } else setPermissionMessage(Util.format(CommandHandler.getNoPermissionMessage()));
     }
 
@@ -39,7 +45,6 @@ public class BukkitCommand extends org.bukkit.command.Command {
             sender.sendMessage(Util.format("&cAn unknown error occurred attempting to perform this command."));
             if (sender.isOp()) {
                 if (e.getCause() != null) sender.sendMessage(Util.format("&c" + e.getCause().toString()));
-                //sender.sendMessage(Util.format("&c" + e.getStackTrace()[0].toString()));
             }
 
             e.printStackTrace();

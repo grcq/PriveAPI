@@ -67,7 +67,7 @@ public class JDACommandNode {
         }
 
         List<Object> parameters = getParameters((method.getParameters()[0]));
-        
+
 
         method.invoke(null, parameters);
     }

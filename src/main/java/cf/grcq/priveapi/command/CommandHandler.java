@@ -35,7 +35,6 @@ public class CommandHandler {
 
     @Getter @Setter private static String noPermissionMessage;
     @Getter @Setter private static String playerOnlyMessage;
-    @Getter @Setter private static String unknownCommandMessage;
     @Getter @Setter private static String usageMessage;
     @Getter @Setter private static String usageMessageList;
     @Getter @Setter private static String usageMessageListLine;
@@ -165,7 +164,6 @@ public class CommandHandler {
 
         noPermissionMessage = "&cNo permission!";
         playerOnlyMessage = "&cPlayers only!";
-        unknownCommandMessage = "Unknown command. Type \"/help\" for help.";
         usageMessage = "&cUsage: /{command} {arguments}";
         usageMessageList = "&6/{command} &f{arguments}";
         usageMessageListLine = "&7&m-------------------------";

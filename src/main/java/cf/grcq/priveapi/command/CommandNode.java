@@ -168,6 +168,7 @@ public class CommandNode {
             return;
         }
 
+        int flagsFound = 0;
         int flagsUsed = 0;
         int i = 0;
         for (Parameter parameter : methodParameters) {
@@ -177,14 +178,19 @@ public class CommandNode {
                 Param param = parameter.getAnnotation(Param.class);
                 if (param == null) continue;
 
-                if (parameter.isAnnotationPresent(Flag.class)) {
+                // Might come later.
+                /*if (parameter.isAnnotationPresent(Flag.class)) {
                     Flag flag = parameter.getAnnotation(Flag.class);
                     if (flag == null) continue;
 
-                    String s = (i < args.length ? args[i] : param.defaultValue());
+                    for (String s : args) {
+                        System.out.println(s + " - ARG NUMBER " + i + " - FLAGS USED NUMBER " + (i - flagsUsed)); // Debug
+                    }
+
+                    String s = (i + flagsUsed < args.length ? args[i + flagsUsed] : param.defaultValue());
                     if (s.equalsIgnoreCase("-" + flag.name()))  {
-                        if (args.length <= i + 1) {
-                            System.out.println("ok");
+                        if (args.length <= i + flagsUsed) {
+                            System.out.println("ok"); // Debug
                             parameters.add(null);
                             continue;
                         }
@@ -192,9 +198,8 @@ public class CommandNode {
                         String s_ = args[i + 1];
 
                         Object object = CommandHandler.transformParameter(sender, s_, parameter.getType());
-                        System.out.println(object);
+                        System.out.println(object); // Debug
                         if (object == null) {
-                            System.out.println("break");
                             b = true;
                             break;
                         }
@@ -204,35 +209,48 @@ public class CommandNode {
                     } else {
                         parameters.add(null);
                     }
-                } else {
-                    String s = (i + flagsUsed + (flagsUsed > 0 ? 1 : 0) < args.length ? args[i + flagsUsed] : param.defaultValue());
-                    System.out.println(args.length + " " + i + " " + (i + flagsUsed));
-                    if (param.wildcard()) {
-                        a = true;
-                        s = toString(args, i + flagsUsed);
-                    }
+                } else {*/
+                String s = (i - flagsFound < args.length - flagsUsed ? args[i - flagsFound + flagsUsed] : param.defaultValue());
 
-                    System.out.println(s + " AAA");
-
-                    if (s == null || s.isEmpty()) {
-                        break;
-                    }
-
-                    Object object = CommandHandler.transformParameter(sender, s, parameter.getType());
-                    System.out.println(object);
-                    if (object == null) {
-                        b = true;
-                        break;
-                    }
-
-                    parameters.add(object);
+                int j = 0;
+                for (String t : args) {
+                    j++;
                 }
+
+                if (param.wildcard()) {
+                    a = true;
+                    s = toString(args, i);
+                }
+
+                if (s == null || s.isEmpty()) {
+                    break;
+                }
+
+                Object object = CommandHandler.transformParameter(sender, s, parameter.getType());
+                if (object == null) {
+                    b = true;
+                    break;
+                }
+
+                parameters.add(object);
+                //}
             } else if (parameter.isAnnotationPresent(Flag.class)) {
                 Flag flag = parameter.getAnnotation(Flag.class);
                 if (flag == null) continue;
 
-                String fullArguments = String.join(" ", args);
-                parameters.add(fullArguments.contains("-" + flag.name()));
+                List<String> fullArguments = Arrays.asList(args);
+                flagsFound += 1;
+
+                boolean found = false;
+                for (String flagName : flag.names()) {
+                    if (fullArguments.get(i).equalsIgnoreCase("-" + flagName)) {
+                        found = true;
+                        flagsUsed += 1;
+                        break;
+                    }
+                }
+
+                parameters.add(found);
             } else {
                 throw new RuntimeException("Parameter does not have @Param or @Flag annotation.");
             }
@@ -242,19 +260,14 @@ public class CommandNode {
 
         if (b) return;
 
-        System.out.println("hi " + parameters.size() + " " + methodParameters.size());
-        System.out.println(methodParameters);
-        System.out.println(parameters);
-
         if ((annotation.sendUsage() && method.getParameterCount() <= 1) ||
-                ((parameters.size() - 1 - flagsUsed) < (methodParameters.size()))) {
+                ((parameters.size() - 1) < methodParameters.size())) {
             sender.sendMessage(Util.format(getUsage()));
             return;
         }
 
-        if (((parameters.size() - 1 - flagsUsed) > (methodParameters.size()) && !a)) {
+        if (((parameters.size() - 1) > methodParameters.size() && !a)) {
             sender.sendMessage(Util.format(getUsage()));
-            System.out.println("hi " + parameters.size() + " " + methodParameters.size());
             return;
         }
 
@@ -280,7 +293,7 @@ public class CommandNode {
                 Param param = parameter.getAnnotation(Param.class);
                 Flag flag = parameter.getAnnotation(Flag.class);
                 if (flag != null) {
-                    params.append("[").append("-").append(flag.name())
+                    params.append("[").append("-").append(flag.names()[0])
                             .append("] ");
                 }
 
@@ -315,7 +328,7 @@ public class CommandNode {
                         Param param = parameter.getAnnotation(Param.class);
                         Flag flag = parameter.getAnnotation(Flag.class);
                         if (flag != null) {
-                            params.append("[").append("-").append(flag.name())
+                            params.append("[").append("-").append(flag.names()[0])
                                     .append("] ");
                         }
 
@@ -357,7 +370,7 @@ public class CommandNode {
                         Param param = parameter.getAnnotation(Param.class);
                         Flag flag = parameter.getAnnotation(Flag.class);
                         if (flag != null) {
-                            params.append("[").append("-").append(flag.name())
+                            params.append("[").append("-").append(flag.names()[0])
                                     .append("] ");
                         }
 
