@@ -19,7 +19,7 @@ You need to upload the JAR file to your plugins folder on your server. Go to you
     <dependency>
         <groupId>cf.grcq</groupId>
         <artifactId>PriveAPI</artifactId>
-        <version>1.1</version>
+        <version>1.2</version>
     </dependency>
 </dependencies>
 ```
