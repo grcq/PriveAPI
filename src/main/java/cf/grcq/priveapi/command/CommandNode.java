@@ -243,10 +243,12 @@ public class CommandNode {
 
                 boolean found = false;
                 for (String flagName : flag.names()) {
-                    if (fullArguments.get(i).equalsIgnoreCase("-" + flagName)) {
-                        found = true;
-                        flagsUsed += 1;
-                        break;
+                    if (i < fullArguments.size()) {
+                        if (fullArguments.get(i).equalsIgnoreCase("-" + flagName)) {
+                            found = true;
+                            flagsUsed += 1;
+                            break;
+                        }
                     }
                 }
 
