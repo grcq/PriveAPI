@@ -212,11 +212,6 @@ public class CommandNode {
                 } else {*/
                 String s = (i - flagsFound < args.length - flagsUsed ? args[i - flagsFound + flagsUsed] : param.defaultValue());
 
-                int j = 0;
-                for (String t : args) {
-                    j++;
-                }
-
                 if (param.wildcard()) {
                     a = true;
                     s = toString(args, i);
