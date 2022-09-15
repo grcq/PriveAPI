@@ -2,11 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-    <artifactId>PriveAPI</artifactId>
-    <groupId>cf.grcq</groupId>
-    <version>1.2</version>
     <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cf.grcq</groupId>
+    <artifactId>PriveAPI</artifactId>
+    <version>1.2</version>
+    <packaging>jar</packaging>
 
     <name>PriveAPI</name>
 
@@ -38,6 +39,20 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>**/*.kotlin_metadata</exclude>
+                                        <exclude>**/*.kotlin_module</exclude>
+                                        <exclude>**/*.kotlin_builtins</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <outputFile>${project.build.directory}/${project.artifactId}-${version}-full.jar</outputFile>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
@@ -93,11 +108,6 @@
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
             <version>5.0.0-alpha.12</version>
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.10.2</version>
         </dependency>
     </dependencies>
 
