@@ -109,6 +109,11 @@
             <artifactId>JDA</artifactId>
             <version>5.0.0-alpha.12</version>
         </dependency>
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>5.14.2</version>
+        </dependency>
     </dependencies>
 
 </project>
