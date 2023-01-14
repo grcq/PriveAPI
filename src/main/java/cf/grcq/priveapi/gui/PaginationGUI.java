@@ -3,6 +3,9 @@ package cf.grcq.priveapi.gui;
 import cf.grcq.priveapi.gui.buttons.GlassButton;
 import cf.grcq.priveapi.gui.buttons.NextPageButton;
 import cf.grcq.priveapi.gui.buttons.PreviousPageButton;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.SneakyThrows;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -10,7 +13,9 @@ import java.util.Map;
 
 public abstract class PaginationGUI extends GUI {
 
-    private int page;
+    @Setter
+    @Getter
+    protected int page;
 
     abstract public String getPerPageTitle(Player player);
 
@@ -37,6 +42,7 @@ public abstract class PaginationGUI extends GUI {
         return getPerPageTitle(player) + " [" + page + "/" + getMaxPage(player) + "]";
     }
 
+    @SneakyThrows
     @Override
     public final Map<Integer, Button> getButtons(Player player) {
         Map<Integer, Button> buttons = new HashMap<>();
@@ -60,11 +66,12 @@ public abstract class PaginationGUI extends GUI {
         }
 
         if (nextPage) {
-            buttons.put(size() - 1, new NextPageButton(page + 1));
+
+            buttons.put(size() - 1, new NextPageButton(this));
         }
 
         if (page > 1) {
-            buttons.put(size() - 9, new PreviousPageButton(page - 1));
+            buttons.put(size() - 9, new PreviousPageButton(this));
         }
 
         return buttons;
