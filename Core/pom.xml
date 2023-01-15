@@ -7,10 +7,7 @@
     <groupId>cf.grcq</groupId>
     <artifactId>PriveAPI</artifactId>
     <version>1.2</version>
-    <modules>
-        <module>Processor</module>
-    </modules>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <name>PriveAPI</name>
 
@@ -82,6 +79,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>cf.grcq.processor</groupId>
+            <artifactId>Processor</artifactId>
+            <version>1.2</version>
+        </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
