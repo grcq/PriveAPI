@@ -1,0 +1,4 @@
+name: PriveAPI
+version: '${project.version}'
+main: cf.grcq.startup.priveapi.Spigot
+authors: [ grcq ]

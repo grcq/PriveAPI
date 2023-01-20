@@ -4,21 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cf.grcq</groupId>
+    <groupId>cf.grcq.startup</groupId>
     <artifactId>PriveAPI</artifactId>
     <version>1.2</version>
-    <modules>
-        <module>Spigot</module>
-        <module>BungeeCord</module>
-        <module>Processor</module>
-    </modules>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
+
+    <name>PriveAPI</name>
 
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <url>https://docs.grcq.cf</url>
 
     <build>
         <plugins>
@@ -42,20 +38,6 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                        <exclude>**/*.kotlin_metadata</exclude>
-                                        <exclude>**/*.kotlin_module</exclude>
-                                        <exclude>**/*.kotlin_builtins</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                            <outputFile>${project.build.directory}/${project.artifactId}-${version}-full.jar</outputFile>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
@@ -86,37 +68,23 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.19-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>23.0.0</version>
+            <groupId>cf.grcq.bungee</groupId>
+            <artifactId>PriveAPI</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>3.12.11</version>
-        </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>4.2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>net.dv8tion</groupId>
-            <artifactId>JDA</artifactId>
-            <version>5.0.0-alpha.12</version>
-        </dependency>
-        <dependency>
-            <groupId>com.rabbitmq</groupId>
-            <artifactId>amqp-client</artifactId>
-            <version>5.14.2</version>
+            <groupId>cf.grcq.spigot</groupId>
+            <artifactId>Spigot</artifactId>
+            <version>1.2</version>
         </dependency>
     </dependencies>
-
 </project>

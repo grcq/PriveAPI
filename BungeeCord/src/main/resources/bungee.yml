@@ -1,0 +1,3 @@
+name: PriveAPI
+version: '${project.version}'
+main: cf.grcq.bungee.priveapi.PriveAPI
