@@ -5,7 +5,6 @@ import cf.grcq.bungee.priveapi.command.parameter.Param;
 import cf.grcq.bungee.priveapi.command.parameter.ParameterType;
 import cf.grcq.bungee.priveapi.utils.Util;
 import com.google.common.collect.Lists;
-import com.sun.tools.javac.util.StringUtils;
 import lombok.Data;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
