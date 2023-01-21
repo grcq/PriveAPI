@@ -5,11 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cf.grcq.bungee</groupId>
-    <artifactId>PriveAPI</artifactId>
+    <artifactId>BungeeCord</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-
-    <name>PriveAPI</name>
 
     <properties>
         <java.version>1.8</java.version>
@@ -101,6 +99,11 @@
             <artifactId>jedis</artifactId>
             <version>4.2.3</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>cf.grcq.processor</groupId>
+            <artifactId>Processor</artifactId>
+            <version>1.2</version>
         </dependency>
     </dependencies>
 </project>

@@ -11,6 +11,7 @@
         <module>Spigot</module>
         <module>BungeeCord</module>
         <module>Processor</module>
+        <module>Startup</module>
     </modules>
     <packaging>pom</packaging>
 
