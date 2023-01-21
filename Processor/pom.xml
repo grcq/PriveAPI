@@ -13,9 +13,9 @@
     <artifactId>Processor</artifactId>
 
     <properties>
-        <maven.compiler.source>19</maven.compiler.source>
-        <maven.compiler.target>19</maven.compiler.target>
-        <java.version>19</java.version>
+        <maven.compiler.source>15</maven.compiler.source>
+        <maven.compiler.target>15</maven.compiler.target>
+        <java.version>15</java.version>
     </properties>
 
     <build>
@@ -72,6 +72,12 @@
             <groupId>br.com.objectos</groupId>
             <artifactId>javapoet</artifactId>
             <version>1.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kohsuke.metainf-services</groupId>
+            <artifactId>metainf-services</artifactId>
+            <version>1.1</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

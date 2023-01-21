@@ -12,7 +12,7 @@
     <name>Startup</name>
 
     <properties>
-        <java.version>19</java.version>
+        <java.version>15</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -40,6 +40,25 @@
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.bsc.maven</groupId>
+                <artifactId>maven-processor-plugin</artifactId>
+                <version>2.2.4</version>
+                <configuration>
+                    <processors>
+                        <processor>cf.grcq.processor.DatabaseProcessor</processor>
+                    </processors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>process</id>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -84,6 +103,11 @@
         <dependency>
             <groupId>cf.grcq.spigot</groupId>
             <artifactId>Spigot</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>cf.grcq.processor</groupId>
+            <artifactId>Processor</artifactId>
             <version>1.2</version>
         </dependency>
     </dependencies>

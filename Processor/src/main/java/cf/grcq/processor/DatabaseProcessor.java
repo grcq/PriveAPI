@@ -10,6 +10,7 @@ import com.mongodb.client.model.Filters;
 import com.squareup.javapoet.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.kohsuke.MetaInfServices;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
