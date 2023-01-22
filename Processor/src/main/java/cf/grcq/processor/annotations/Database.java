@@ -11,8 +11,16 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface Database {
 
-    Type type() default Type.MYSQL;
-
     String table();
+
+    Type type();
+
+    String username();
+    String password();
+    String address();
+
+    String database() default "";
+
+    boolean srv() default false;
 
 }
