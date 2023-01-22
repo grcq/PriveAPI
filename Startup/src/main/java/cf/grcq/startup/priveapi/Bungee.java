@@ -9,8 +9,8 @@ public final class Bungee extends Plugin {
 
     @Override
     public void onEnable() {
+        api = new PriveAPIB();
         api.onEnable();
-
     }
 
     @Override

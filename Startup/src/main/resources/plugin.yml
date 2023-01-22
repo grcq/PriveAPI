@@ -1,5 +1,5 @@
 name: PriveAPI
 version: '${project.version}'
-main: cf.grcq.startup.priveapi.Spigot
+main: cf.grcq.priveapi.PriveAPIS
 authors: [ grcq ]
 website: https://docs.grcq.cf

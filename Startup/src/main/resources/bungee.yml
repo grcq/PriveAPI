@@ -1,4 +1,4 @@
 name: PriveAPI
 version: '${project.version}'
-main: cf.grcq.startup.priveapi.Spigot
+main: cf.grcq.bungee.priveapi.PriveAPIB
 authors: [ grcq ]
