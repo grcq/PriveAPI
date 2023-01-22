@@ -272,17 +272,17 @@ public class DatabaseProcessor extends AbstractProcessor {
 
         switch (db.type()) {
             case MYSQL:
-                builder.addParameter(ParameterSpec.builder(typeName, "databaseClass").addAnnotation(NotNull.class).build())
+                builder.addParameter(ParameterSpec.builder(Class.class, "databaseClass").addAnnotation(NotNull.class).build())
                         .addCode("""
                         try {
-                            java.sql.Connection connection = java.sql.DriverManager.getConnection(((cf.grcq.processor.annotations.Database) databaseClass.getClass().getAnnotation(cf.grcq.processor.annotations.Database.class)).type().getUri());
+                            java.sql.Connection connection = java.sql.DriverManager.getConnection(((cf.grcq.processor.annotations.Database) databaseClass.getAnnotation(cf.grcq.processor.annotations.Database.class)).type().getUri());
                             
                             java.sql.PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM %s WHERE " + filter.o1 + "=" + (filter.o2.getClass().getSimpleName().equalsIgnoreCase("String") ? "'" + filter.o2 + "'" : filter.o2 + ";")); 
                             java.sql.ResultSet resultSet = preparedStatement.executeQuery();
                             
                             com.google.gson.JsonObject object = new com.google.gson.JsonObject();
                             while (resultSet.next()) {
-                                for (java.lang.reflect.Field field : databaseClass.getClass().getDeclaredFields()) {
+                                for (java.lang.reflect.Field field : databaseClass.getDeclaredFields()) {
                                     object.add(field.getName(), cf.grcq.processor.util.JsonUtil.fix(field.get(databaseClass)));
                                 }
                             }
@@ -330,7 +330,7 @@ public class DatabaseProcessor extends AbstractProcessor {
                         try {
                             java.sql.Connection connection = java.sql.DriverManager.getConnection(((cf.grcq.processor.annotations.Database) databaseClass.getClass().getAnnotation(cf.grcq.processor.annotations.Database.class)).type().getUri());
                             
-                            cf.grcq.processor.database.Filter filter = cf.grcq.processor.database.Filter.equals("%s", databaseClass.getClass().getField("%s").get(databaseClass));
+                            cf.grcq.processor.database.Filter filter = cf.grcq.processor.database.Filter.equal("%s", databaseClass.getClass().getField("%s").get(databaseClass));
                             
                             java.sql.PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM %s WHERE " + filter.o1 + "=" + (filter.o2.getClass().getSimpleName().equalsIgnoreCase("String") ? "'" + filter.o2 + "'" : filter.o2 + ";")); 
                             preparedStatement.executeUpdate();

@@ -10,7 +10,7 @@ public class Filter {
         this.o2 = o2;
     }
 
-    public static Filter equals(String o1, Object o2) {
+    public static Filter equal(String o1, Object o2) {
         return new Filter(o1, o2);
     }
 
