@@ -225,16 +225,12 @@ public class DatabaseProcessor extends AbstractProcessor {
                                     field.setAccessible(true);
                                     
                                     Object object;
-                                    System.out.println(field.getType().getSimpleName());
                                     if (field.getType().getSimpleName().equalsIgnoreCase("String") || field.getType().getSimpleName().equalsIgnoreCase("UUID")) {
                                         Object o = field.get(databaseClass);
-                                        System.out.println(o);
                                         
                                         if (o == null) object = "null";
                                         else object = String.valueOf("'" + field.get(databaseClass).toString() + "'");
                                     } else object = field.get(databaseClass);
-                                    
-                                    System.out.println(object);
                                     
                                     stringBuilder.append(String.valueOf(object));
                                     
@@ -255,10 +251,22 @@ public class DatabaseProcessor extends AbstractProcessor {
                             int i = 0;
                             for (java.lang.reflect.Field field : databaseClass.getClass().getDeclaredFields()) {
                                 i++;
+                                    
+                                field.setAccessible(true);
                                 
                                 stringBuilder.append(field.getName()).append("=");
-                                if (field.getName().equalsIgnoreCase("String")) stringBuilder.append("'").append(field.get(databaseClass)).append("'");
-                                else stringBuilder.append(field.get(databaseClass));
+                                
+                                Object object;
+                                if (field.getType().getSimpleName().equalsIgnoreCase("String") || field.getType().getSimpleName().equalsIgnoreCase("UUID")) {
+                                    Object o = field.get(databaseClass);
+                                    
+                                    if (o == null) object = "null";
+                                    else object = String.valueOf("'" + field.get(databaseClass.getDeclaredConstructor().newInstance()).toString() + "'");
+                                } else object = field.get(databaseClass.getDeclaredConstructor().newInstance());
+                                
+                                stringBuilder.append(String.valueOf(object));
+                                
+                                field.setAccessible(false);
                                 
                                 if (i < databaseClass.getClass().getDeclaredFields().length) stringBuilder.append(", ");
                             }
@@ -268,7 +276,7 @@ public class DatabaseProcessor extends AbstractProcessor {
                             
                             connection.close();
                             
-                        } catch (java.sql.SQLException | NoSuchFieldException | IllegalAccessException e) {
+                        } catch (java.sql.SQLException | NoSuchFieldException | IllegalAccessException | java.lang.Exception e) {
                             e.printStackTrace();
                         }
                         """, uri, db.username(), db.password(), db.table(), db.table(), db.table(), fields.get(0).getSimpleName(), fields.get(0).getSimpleName())
@@ -329,16 +337,18 @@ public class DatabaseProcessor extends AbstractProcessor {
                             com.google.gson.JsonObject object = new com.google.gson.JsonObject();
                             while (resultSet.next()) {
                                 for (java.lang.reflect.Field field : databaseClass.getDeclaredFields()) {
-                                    field.setAccessible(true);
-                                    object.add(field.getName(), cf.grcq.processor.util.JsonUtil.fix(field.get(databaseClass)));
-                                    field.setAccessible(false);
+                                    boolean isPrivate = !field.isAccessible();
+                                
+                                    if (isPrivate) field.setAccessible(true);
+                                    object.add(field.getName(), cf.grcq.processor.util.JsonUtil.fix(field, databaseClass));
+                                    field.setAccessible(isPrivate);
                                 }
                             }
                             
                             connection.close();
                             
                             return gson.fromJson(object.toString(), %s.class);
-                        } catch (java.sql.SQLException | IllegalAccessException e) {
+                        } catch (java.sql.SQLException e) {
                             e.printStackTrace();
                             return null;
                         }
@@ -467,7 +477,7 @@ public class DatabaseProcessor extends AbstractProcessor {
                                 com.google.gson.JsonObject object = new com.google.gson.JsonObject();
                                 for (java.lang.reflect.Field field : databaseClass.getDeclaredFields()) {
                                     field.setAccessible(true);
-                                    object.add(field.getName(), cf.grcq.processor.util.JsonUtil.fix(field.get(databaseClass)));
+                                    object.add(field.getName(), cf.grcq.processor.util.JsonUtil.fix(field, databaseClass));
                                     field.setAccessible(false);
                                 }
                                 
@@ -478,7 +488,7 @@ public class DatabaseProcessor extends AbstractProcessor {
                             connection.close();
                             
                             return list;
-                        } catch (java.sql.SQLException | IllegalAccessException e) {
+                        } catch (java.sql.SQLException e) {
                             e.printStackTrace();
                             return new java.util.ArrayList<>();
                         }
