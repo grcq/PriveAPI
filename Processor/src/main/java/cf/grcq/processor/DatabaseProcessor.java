@@ -240,7 +240,6 @@ public class DatabaseProcessor extends AbstractProcessor {
                                 }
                                 
                                 preparedStatement = connection.prepareStatement("INSERT INTO %s VALUES (" + stringBuilder.toString() + ");");
-                                System.out.println(stringBuilder.toString() + " - STRIGNB BUIOLDER");
                                 preparedStatement.executeUpdate();
                                 
                                 connection.close();
@@ -261,8 +260,8 @@ public class DatabaseProcessor extends AbstractProcessor {
                                     Object o = field.get(databaseClass);
                                     
                                     if (o == null) object = "null";
-                                    else object = String.valueOf("'" + field.get(databaseClass.getDeclaredConstructor().newInstance()).toString() + "'");
-                                } else object = field.get(databaseClass.getDeclaredConstructor().newInstance());
+                                    else object = String.valueOf("'" + field.get(databaseClass).toString() + "'");
+                                } else object = field.get(databaseClass);
                                 
                                 stringBuilder.append(String.valueOf(object));
                                 
@@ -276,7 +275,7 @@ public class DatabaseProcessor extends AbstractProcessor {
                             
                             connection.close();
                             
-                        } catch (java.sql.SQLException | NoSuchFieldException | IllegalAccessException | java.lang.Exception e) {
+                        } catch (java.lang.Exception e) {
                             e.printStackTrace();
                         }
                         """, uri, db.username(), db.password(), db.table(), db.table(), db.table(), fields.get(0).getSimpleName(), fields.get(0).getSimpleName())
@@ -333,6 +332,8 @@ public class DatabaseProcessor extends AbstractProcessor {
                             
                             java.sql.PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM %s WHERE " + filter.o1 + "=" + (filter.o2.getClass().getSimpleName().equalsIgnoreCase("String") || filter.o2.getClass().getSimpleName().equalsIgnoreCase("UUID") ? "'" + filter.o2 + "'" : filter.o2.toString() + ";")); 
                             java.sql.ResultSet resultSet = preparedStatement.executeQuery();
+                            
+                            if (!resultSet.next()) return null;
                             
                             com.google.gson.JsonObject object = new com.google.gson.JsonObject();
                             while (resultSet.next()) {
