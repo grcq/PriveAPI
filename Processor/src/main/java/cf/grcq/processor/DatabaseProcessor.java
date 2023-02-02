@@ -270,15 +270,19 @@ public class DatabaseProcessor extends AbstractProcessor {
                                 if (i < databaseClass.getClass().getDeclaredFields().length) stringBuilder.append(", ");
                             }
                             
-                            preparedStatement = connection.prepareStatement("UPDATE %s SET " + stringBuilder + " WHERE %s='" + databaseClass.getClass().getDeclaredField("%s").get(databaseClass) + "';"); 
+                            java.lang.reflect.Field f = databaseClass.getClass().getDeclaredField("%s");
+                            f.setAccessible(true);
+                            preparedStatement = connection.prepareStatement("UPDATE %s SET " + stringBuilder + " WHERE %s='" + f.get(databaseClass) + "';"); 
                             preparedStatement.executeUpdate();
+                            
+                            f.setAccessible(false);
                             
                             connection.close();
                             
                         } catch (java.lang.Exception e) {
                             e.printStackTrace();
                         }
-                        """, uri, db.username(), db.password(), db.table(), db.table(), db.table(), fields.get(0).getSimpleName(), fields.get(0).getSimpleName())
+                        """, uri, db.username(), db.password(), db.table(), db.table(), fields.get(0).getSimpleName(), db.table(), fields.get(0).getSimpleName())
                 );
                 break;
             case MONGODB:
@@ -325,9 +329,10 @@ public class DatabaseProcessor extends AbstractProcessor {
 
         switch (db.type()) {
             case MYSQL:
-                builder.addParameter(ParameterSpec.builder(Class.class, "databaseClass").addAnnotation(NotNull.class).build())
-                        .addCode(String.format("""
+                builder.addCode(String.format("""
                         try {
+                            java.lang.Class<?> databaseClass = %s.class;
+                        
                             java.sql.Connection connection = java.sql.DriverManager.getConnection("%s", "%s", "%s");
                             
                             java.sql.PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM %s WHERE " + filter.o1 + "=" + (filter.o2.getClass().getSimpleName().equalsIgnoreCase("String") || filter.o2.getClass().getSimpleName().equalsIgnoreCase("UUID") ? "'" + filter.o2 + "'" : filter.o2.toString() + ";")); 
@@ -335,25 +340,28 @@ public class DatabaseProcessor extends AbstractProcessor {
                             
                             if (!resultSet.next()) return null;
                             
-                            com.google.gson.JsonObject object = new com.google.gson.JsonObject();
-                            while (resultSet.next()) {
-                                for (java.lang.reflect.Field field : databaseClass.getDeclaredFields()) {
-                                    boolean isPrivate = !field.isAccessible();
+                            %s newInst = new %s();
+                            for (java.lang.reflect.Field field : databaseClass.getDeclaredFields()) {
+                                boolean isPrivate = !field.isAccessible();
                                 
-                                    if (isPrivate) field.setAccessible(true);
-                                    object.add(field.getName(), cf.grcq.processor.util.JsonUtil.fix(field, databaseClass));
-                                    field.setAccessible(isPrivate);
-                                }
+                                if (isPrivate) field.setAccessible(true);
+                                Object obj = resultSet.getObject(field.getName());
+                                
+                                java.lang.reflect.Field f = newInst.getClass().getDeclaredField(field.getName());
+                                f.setAccessible(true);
+                                
+                                f.set(newInst, obj);
+                                field.setAccessible(isPrivate);
                             }
                             
                             connection.close();
                             
-                            return gson.fromJson(object.toString(), %s.class);
-                        } catch (java.sql.SQLException e) {
+                            return newInst;
+                        } catch (java.sql.SQLException | java.lang.ReflectiveOperationException e) {
                             e.printStackTrace();
                             return null;
                         }
-                        """, uri, db.username(), db.password(), db.table(), typeName)
+                        """, typeName, uri, db.username(), db.password(), db.table(), typeName, typeName, typeName)
                 );
                 break;
             case MONGODB:
@@ -475,15 +483,12 @@ public class DatabaseProcessor extends AbstractProcessor {
                         
                             java.util.List<%s> list = new java.util.ArrayList<>();
                             while (resultSet.next()) {
-                                com.google.gson.JsonObject object = new com.google.gson.JsonObject();
                                 for (java.lang.reflect.Field field : databaseClass.getDeclaredFields()) {
-                                    field.setAccessible(true);
-                                    object.add(field.getName(), cf.grcq.processor.util.JsonUtil.fix(field, databaseClass));
-                                    field.setAccessible(false);
+                                    Object obj = resultSet.getObject(field.getName());
+                                    %s newInst = get(cf.grcq.processor.database.Filter.equal(field.getName(), obj));
+                                    
+                                    list.add(newInst);
                                 }
-                                
-                                %s value = gson.fromJson(object.toString(), %s.class);
-                                list.add(value);
                             }
                             
                             connection.close();
@@ -493,7 +498,7 @@ public class DatabaseProcessor extends AbstractProcessor {
                             e.printStackTrace();
                             return new java.util.ArrayList<>();
                         }
-                        """, uri, db.username(), db.password(), db.table(), typeName, typeName, typeName)
+                        """, uri, db.username(), db.password(), db.table(), typeName, typeName)
                 );
                 break;
             default:
