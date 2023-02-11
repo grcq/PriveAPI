@@ -31,6 +31,8 @@ public final class PriveAPIS extends JavaPlugin {
         if (!file.exists()) {
             file.createNewFile();
         }
+
+        CommandHandler.registerClass(this, getClass());
     }
 
     @Override
