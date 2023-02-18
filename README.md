@@ -14,15 +14,15 @@ You are not able to use this repository due to issues with the connections. Plea
 <repositories>
     <repository>
         <id>grcq-releases</id>
-        <url>http://repo.grcq.cf/repository/maven-releases/</url>
+        <url>http://repo.grcq.dev/repository/grcq-releases/</url>
     </repository>
 </repositories>
 
 <dependencies>
     <dependency>
-        <groupId>cf.grcq</groupId>
+        <groupId>dev.grcq</groupId>
         <artifactId>PriveAPI</artifactId>
-        <version>1.2</version>
+        <version>1.3</version>
     </dependency>
 </dependencies>
 ```
