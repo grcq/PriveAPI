@@ -16,7 +16,7 @@ public class Spigot extends JavaPlugin {
 
     @SneakyThrows
     @Override
-    public void onEnable() {;
+    public void onEnable() {
     }
 
     @Override

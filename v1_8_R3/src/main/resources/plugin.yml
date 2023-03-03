@@ -1,0 +1,4 @@
+name: V1_8_R3
+version: '${project.version}'
+main: dev.grcq.v1_8_r3.V1_8_R3
+authors: [ grcq ]

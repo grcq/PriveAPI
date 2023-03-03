@@ -1,0 +1,3 @@
+name: V1_12_R3
+version: '${project.version}'
+main: dev.grcq.v1_12_r3.V1_12_R3

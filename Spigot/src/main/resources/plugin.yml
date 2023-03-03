@@ -1,0 +1,5 @@
+name: PriveAPI
+version: '${project.version}'
+main: cf.grcq.priveapi.PriveAPIS
+authors: [ grcq ]
+website: https://docs.grcq.dev

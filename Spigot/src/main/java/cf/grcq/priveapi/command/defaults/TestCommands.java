@@ -3,8 +3,8 @@ package cf.grcq.priveapi.command.defaults;
 import cf.grcq.priveapi.command.Command;
 import cf.grcq.priveapi.command.flag.Flag;
 import cf.grcq.priveapi.command.parameter.Param;
+import cf.grcq.priveapi.tag.TagHandler;
 import cf.grcq.priveapi.utils.Util;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -34,6 +34,6 @@ public class TestCommands {
         player.sendMessage("String 1: " + s);
         player.sendMessage("String 2: " + a);
         player.sendMessage("Flag used? " + f);
-    }
 
+    }
 }

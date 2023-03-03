@@ -2,6 +2,7 @@ package cf.grcq.priveapi.command;
 
 import cf.grcq.priveapi.PriveAPIS;
 import cf.grcq.priveapi.command.defaults.CommandInfoCommand;
+import cf.grcq.priveapi.command.defaults.TagTestCommand;
 import cf.grcq.priveapi.command.defaults.TestCommands;
 import cf.grcq.priveapi.command.parameter.ParameterType;
 import cf.grcq.priveapi.command.parameter.defaults.*;
@@ -184,8 +185,9 @@ public class CommandHandler {
         registerParameter(World.class, new WorldParameterType());
         registerParameter(Material.class, new MaterialParameterType());
 
-        registerClass(PriveAPIS.getInstance(), CommandInfoCommand.class);
+        registerClass(PriveAPIS.getInstance(), CommandHandler.class);
         registerClass(PriveAPIS.getInstance(), TestCommands.class);
+        registerClass(PriveAPIS.getInstance(), TagTestCommand.class);
     }
 
 }
