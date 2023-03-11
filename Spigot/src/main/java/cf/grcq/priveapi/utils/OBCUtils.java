@@ -11,9 +11,9 @@ public class OBCUtils {
     public static Class<?> getOBCClass(String name) {
         String version = VersionUtils.getNMSVersion();
         try {
-            return Class.forName("org.bukkit.craftbukkit" + version + "." + name);
+            return Class.forName("org.bukkit.craftbukkit." + version + "." + name);
         } catch (Exception e) {
-            Bukkit.getLogger().severe("Could not find NMS Class '" + name + ".java' (NMS Version: " + version + ").");
+            Bukkit.getLogger().severe("Could not find OBC Class '" + name + ".java' (NMS Version: " + version + ").");
             return null;
         }
     }
