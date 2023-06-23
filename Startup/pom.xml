@@ -125,17 +125,17 @@
         <dependency>
             <groupId>cf.grcq.bungee</groupId>
             <artifactId>BungeeCord</artifactId>
-            <version>1.0</version>
+            <version>1.3</version>
         </dependency>
         <dependency>
             <groupId>cf.grcq.spigot</groupId>
             <artifactId>Spigot</artifactId>
-            <version>1.2</version>
+            <version>1.3</version>
         </dependency>
         <dependency>
             <groupId>cf.grcq.processor</groupId>
             <artifactId>Processor</artifactId>
-            <version>1.2</version>
+            <version>1.3</version>
         </dependency>
     </dependencies>
 </project>

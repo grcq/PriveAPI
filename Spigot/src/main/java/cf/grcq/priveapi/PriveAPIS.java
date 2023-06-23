@@ -6,16 +6,18 @@ import cf.grcq.priveapi.language.LanguageHandler;
 import cf.grcq.priveapi.chat.listener.InputListener;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 public final class PriveAPIS extends JavaPlugin {
 
     @Getter private static PriveAPIS instance;
 
     @SneakyThrows
-    @Override
     public void onEnable() {
         this.saveDefaultConfig();
         instance = this;
